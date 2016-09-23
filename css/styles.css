@@ -1,6 +1,18 @@
+html {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
 main {
-	width: 750px;
-	margin: 30px auto;
+	background: #000;
+	flex-grow: 1;
+	padding: 30px;
+	text-align: center;
 }
 
 .clickable {
@@ -10,4 +22,15 @@ main {
 
 .clickable:hover {
 	color: #00bfff;
+}
+
+header {
+	background: #00bfff;
+	border-bottom: 15px solid #60c92b;
+	width: 100%;
+}
+
+h1 {
+	color: #fff;
+	font-family: 'Josefin Sans', 'Arial', sans;
 }

@@ -6,8 +6,9 @@
 
   <title>Play Flapper Bird</title>
 
-  <!--jquery-->
+  <!--Google APIs-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
 
   <!-- Bootstrap -->
   <!-- Latest compiled and minified CSS -->
@@ -33,18 +34,11 @@
 </head>
 
 <body onload="init();">
+	<header class="container-fluid">
+		<h1>Flapper Bird</h1>
+	</header>
 	<main>
-	  <canvas id="flapperBird" width="750px" height="500px"></canvas>
-
-	  <nav class="navbar navbar-default">
-		  <div class="container-fluid">
-		      <ul class="nav navbar-nav navbar-right">
-		        <li onclick="playGame();" class="clickable"><span class="glyphicon glyphicon-play"></span></li>
-		        <li onclick="pauseGame();" class="clickable"><span class="glyphicon glyphicon-pause"></span></li>
-		        <!-- <li onclick="stopGame();" class="clickable"><span class="glyphicon glyphicon-stop"></span></li> -->
-		      </ul>
-		  </div>
-		</nav>
+		<canvas id="flapperBird" width="750px" height="500px"></canvas>
 	</main>
 </body>
 </html>
