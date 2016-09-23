@@ -53,6 +53,8 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 
 	gravitizeFlapper(stage, flapper, speed);
 
+	updateStage(stage, speed);
+
 	window.onkeyup = function (e) {
 		if (e.keyCode === 38) {
 			moveFlapper(stage, flapper, -1, speed);
@@ -60,6 +62,13 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 			moveFlapper(stage, flapper, 1, speed);
 		}
 	}
+}
+
+function updateStage(stage, speed) {
+	setTimeout(function () {
+		stage.update();
+		updateStage(stage, speed);
+	}, speed / 10);
 }
 
 function movePipes (stage, pipes, speed) {
@@ -74,7 +83,7 @@ function movePipes (stage, pipes, speed) {
 					stage.addChild(pipe);
 				}
 			}
-			stage.update();
+			// stage.update();
 			movePipes(stage, pipes, speed);
 		}, speed);
 	}
@@ -105,7 +114,7 @@ function gravitizeFlapper (stage, flapper, speed) {
 			if (flapper.y <= 425) {
 				flapper.y++;
 				stage.addChild(flapper);
-				stage.update();
+				// stage.update();
 				gravitizeFlapper(stage, flapper, speed);
 			} else {
 				helpers.stop(stage);
@@ -122,7 +131,7 @@ function moveFlapper (stage, flapper, direction, speed, counter) {
 		if (counter < 100 && flapper.y > 0 && flapper.y < 425) {
 			flapper.y = flapper.y + direction;
 			stage.addChild(flapper);
-			stage.update();
+			// stage.update();
 			counter++;
 			moveFlapper(stage, flapper, direction, speed, counter);
 		}
