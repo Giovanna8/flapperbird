@@ -2,3 +2,12 @@ main {
 	width: 750px;
 	margin: 30px auto;
 }
+
+.clickable {
+	cursor: pointer;
+	font-size: 30px;
+}
+
+.clickable:hover {
+	color: #00bfff;
+}
