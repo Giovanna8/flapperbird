@@ -1,6 +1,6 @@
 var gameStatus = 'active';
 
-function init () {
+function init (skipStart) {
 	var stage = new createjs.Stage('flapperBird');
 	var sky = new createjs.Shape();
 	sky.graphics.beginFill('#00bfff').drawRect(0,0,750,500);
@@ -23,7 +23,12 @@ function init () {
 			pipeCount = 0;
 			speed = 10;
 
-	startGame(stage, flapper, pipes, pipeCount, speed);
+	if (skipStart) {
+		gameStatus = 'active';
+		startGame(stage, flapper, pipes, pipeCount, speed);
+	} else {
+	alertModal(stage, flapper, pipes, pipeCount, speed, 'Welcome to Flapper Bird!', 'Start', helpers.start);
+}
 
 }
 
@@ -88,7 +93,7 @@ function addPipe() {
 			color = colors[colorSelector],
 			height = helpers.randomize(350, 100),
 			y = helpers.randomize(500, height) - (height + 50);
-	pipe.graphics.beginFill(color.fill).beginStroke(color.stroke).drawRect(0,0,100, height);
+	pipe.graphics.beginFill(color.fill).beginStroke(color.stroke).drawRect(0,0,50, height);
 	pipe.y = y;
 	pipe.x = 750;
 	return pipe;
@@ -102,6 +107,8 @@ function gravitizeFlapper (stage, flapper, speed) {
 				stage.addChild(flapper);
 				stage.update();
 				gravitizeFlapper(stage, flapper, speed);
+			} else {
+				helpers.stop(stage);
 			}
 		}, speed);
 	}
@@ -122,24 +129,45 @@ function moveFlapper (stage, flapper, direction, speed, counter) {
 	}, speed / 10);
 }
 
+function alertModal (stage, flapper, pipes, pipeCount, speed, title, buttonText, buttonFunction) {
+	var gameHeight = 500,
+			gameWidth = 750,
+			quarterWidth = gameWidth / 4,
+			halfWidth = gameWidth / 2,
+			alertBox = new createjs.Shape(),
+			buttonBox = new createjs.Shape(),
+			alertText = new createjs.Text(title, '30px Josefin Sans', '#ffffff'),
+			buttonText = new createjs.Text(buttonText, '20px Josefin Sans', '#ffffff'),
+			buttonBoxWidth = buttonText.getMeasuredWidth() + 40;
+	alertBox.graphics.beginFill('rgba(0,0,0,.75)').drawRect(quarterWidth, gameHeight / 4, halfWidth, gameHeight / 2);
+	buttonBox.graphics.beginFill('#00bfff').drawRect(buttonBoxWidth);
+	buttonBox.x = helpers.center(halfWidth, buttonBoxWidth, quarterWidth);
+	alertText.x = helpers.center(halfWidth, alertText.getMeasuredWidth(), quarterWidth);
+	alertText.y = 150;
+	buttonText.x = helpers.center(halfWidth, buttonText.getMeasuredWidth(), quarterWidth);
+	buttonText.y = 250;
+	var modal = [alertBox, buttonBox, alertText, buttonText];
+	buttonText.addEventListener('click', function (btn) {
+		buttonFunction(stage, flapper, pipes, pipeCount, speed, modal);
+	});
+	stage.addChild(alertBox);
+	stage.addChild(buttonBox);
+	stage.addChild(alertText);
+	stage.addChild(buttonText);
+	stage.update();
+}
+
+function closeModal (stage, modal) {
+	for (var i = 0; i < modal.length; i++) {
+		stage.removeChild(modal[i]);
+	}
+	stage.update();
+}
+
 function levelUp (stage, flapper, pipes, pipeCount, speed, level) {
 	helpers.pause();
 	setTimeout(function () {
-		var alertBox = new createjs.Shape();
-		alertBox.graphics.beginFill('rgba(0,0,0,.75)').drawRect(187.5,125,375,250);
-		var alert = new createjs.Text('Level ' + level +'!', '30px Josefin Sans', '#ffffff');
-		alert.x = helpers.centerText(375, alert, 187.5);
-		alert.y = 150;
-		var play = new createjs.Text('Play', '20px Josefin Sans', '#ffffff');
-		play.x = helpers.centerText(375, play, 187.5);
-		play.y = 250;
-		play.addEventListener('click', function(btn) {
-			helpers.continue(stage, flapper, pipes, pipeCount, speed, alertBox, alert, play);
-		});
-		stage.addChild(alertBox);
-		stage.addChild(alert);
-		stage.addChild(play);
-		stage.update();
+		alertModal(stage, flapper, pipes, pipeCount, speed, 'Level ' + level +'!', 'Continue', helpers.continue);
 	}, speed);
 }
 
@@ -147,21 +175,32 @@ var helpers = {
 	randomize: function (max, min) {
 		return Math.random() * (max - min) + min;
 	},
-	centerText: function (containerWidth, text, offset) {
+	center: function (containerWidth, objWidth, offset) {
 		if (!offset) {
 			offset = 0;
 		}
-		return ((containerWidth - text.getMeasuredWidth()) / 2) + offset;
+		return ((containerWidth - objWidth) / 2) + offset;
 	},
 	pause: function () {
 		gameStatus = 'paused';
 	},
-	continue: function (stage, flapper, pipes, pipeCount, speed, alertBox, alert, play) {
+	continue: function (stage, flapper, pipes, pipeCount, speed, modal) {
+		closeModal(stage, modal);
 		gameStatus = 'active';
-		stage.removeChild(alertBox);
-		stage.removeChild(alert);
-		stage.removeChild(play);
-		console.log(stage);
 		startGame(stage, flapper, pipes, pipeCount, speed);
+	}, 
+	start: function (stage, flapper, pipes, pipeCount, speed, modal) {
+		closeModal(stage, modal);
+		gameStatus = 'active';
+		startGame(stage, flapper, pipes, pipeCount, speed);
+	},
+	stop: function (stage) {
+		helpers.pause();
+		setTimeout(function () {
+			alertModal(stage, false, false, false, false, 'Game Over!', 'Restart', helpers.restart);
+		}, speed);
+	},
+	restart: function () {
+		init(true);
 	}
 }
