@@ -17,23 +17,24 @@ function init (skipStart) {
 	stage.addChild(sky);
 	stage.addChild(ground);
 	stage.addChild(flapper);
-	stage.update();
-
-	var pipes = [],
-			pipeCount = 0;
-			speed = 10;
 
 	if (skipStart) {
 		gameStatus = 'active';
 		startGame(stage, flapper, pipes, pipeCount, speed);
 	} else {
-	alertModal(stage, flapper, pipes, pipeCount, speed, 'Welcome to Flapper Bird!', 'Start', helpers.start);
-}
+		alertModal(stage, flapper, pipes, pipeCount, speed, 'Welcome to Flapper Bird!', 'Start', helpers.start);
+	}
+
+	stage.update();
+
+	var pipes = [],
+	pipeCount = 0;
+	speed = 10;
 
 }
 
 function startGame (stage, flapper, pipes, pipeCount, speed) {
-	var levels = [3, 51, 101, 201, 501];
+	var levels = [16, 51, 101, 201, 501];
 
 	(function addPipes() {
 		if (gameStatus == 'active') {
@@ -83,7 +84,6 @@ function movePipes (stage, pipes, speed) {
 					stage.addChild(pipe);
 				}
 			}
-			// stage.update();
 			movePipes(stage, pipes, speed);
 		}, speed);
 	}
@@ -114,7 +114,6 @@ function gravitizeFlapper (stage, flapper, speed) {
 			if (flapper.y <= 425) {
 				flapper.y++;
 				stage.addChild(flapper);
-				// stage.update();
 				gravitizeFlapper(stage, flapper, speed);
 			} else {
 				helpers.stop(stage);
@@ -131,7 +130,6 @@ function moveFlapper (stage, flapper, direction, speed, counter) {
 		if (counter < 100 && flapper.y > 0 && flapper.y < 425) {
 			flapper.y = flapper.y + direction;
 			stage.addChild(flapper);
-			// stage.update();
 			counter++;
 			moveFlapper(stage, flapper, direction, speed, counter);
 		}
@@ -163,14 +161,12 @@ function alertModal (stage, flapper, pipes, pipeCount, speed, title, buttonText,
 	stage.addChild(buttonBox);
 	stage.addChild(alertText);
 	stage.addChild(buttonText);
-	stage.update();
 }
 
 function closeModal (stage, modal) {
 	for (var i = 0; i < modal.length; i++) {
 		stage.removeChild(modal[i]);
 	}
-	stage.update();
 }
 
 function levelUp (stage, flapper, pipes, pipeCount, speed, level) {
