@@ -56,6 +56,8 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 
 	updateStage(stage, speed);
 
+	checkForCollision(stage, pipes, flapper, speed);
+
 	window.onkeyup = function (e) {
 		if (e.keyCode === 38) {
 			moveFlapper(stage, flapper, -1, speed);
@@ -66,12 +68,22 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 }
 
 function updateStage(stage, speed) {
-	// if (gameStatus == 'active') {
-		setTimeout(function () {
-			stage.update();
-			updateStage(stage, speed);
-		}, speed / 10);
-	// }
+	setTimeout(function () {
+		stage.update();
+		updateStage(stage, speed);
+	}, speed / 10);
+}
+
+function checkForCollision(stage, pipes, flapper, speed) {
+	setTimeout(function () {
+		for (var i = 0; i < pipes.length; i++) {
+			var pipe = pipes[i];
+			if ((pipe.x - flapper.x > -25 && pipe.x - flapper.x < 25) && (pipe.y < flapper.y + 15 && pipe.y + pipe.height > flapper.y + 15)) {
+				helpers.stop(stage);
+			}
+		}
+		checkForCollision(stage, pipes, flapper, speed);
+	}, speed);
 }
 
 function movePipes (stage, pipes, speed) {
@@ -107,6 +119,7 @@ function addPipe() {
 	pipe.graphics.beginFill(color.fill).beginStroke(color.stroke).drawRect(0,0,50, height);
 	pipe.y = y;
 	pipe.x = 750;
+	pipe.height = height;
 	return pipe;
 }
 
