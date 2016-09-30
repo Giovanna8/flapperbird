@@ -18,6 +18,10 @@ function init (skipStart) {
 	stage.addChild(ground);
 	stage.addChild(flapper);
 
+	var pipes = [],
+	pipeCount = 0;
+	speed = 10;
+
 	if (skipStart) {
 		gameStatus = 'active';
 		startGame(stage, flapper, pipes, pipeCount, speed);
@@ -26,10 +30,6 @@ function init (skipStart) {
 	}
 
 	stage.update();
-
-	var pipes = [],
-	pipeCount = 0;
-	speed = 10;
 
 }
 
@@ -66,10 +66,12 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 }
 
 function updateStage(stage, speed) {
-	setTimeout(function () {
-		stage.update();
-		updateStage(stage, speed);
-	}, speed / 10);
+	// if (gameStatus == 'active') {
+		setTimeout(function () {
+			stage.update();
+			updateStage(stage, speed);
+		}, speed / 10);
+	// }
 }
 
 function movePipes (stage, pipes, speed) {
@@ -205,7 +207,8 @@ var helpers = {
 			alertModal(stage, false, false, false, false, 'Game Over!', 'Restart', helpers.restart);
 		}, speed);
 	},
-	restart: function () {
+	restart: function (stage) {
+		$('#flapperBird').replaceWith('<canvas id="flapperBird" width="750px" height="500px"></canvas>');
 		init(true);
 	}
 }
