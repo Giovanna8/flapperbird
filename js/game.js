@@ -20,7 +20,7 @@ function init (skipStart) {
 
 	var pipes = [],
 	pipeCount = 0;
-	speed = 10;
+	speed = 20;
 
 	if (skipStart) {
 		gameStatus = 'active';
@@ -43,7 +43,7 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 				pipes.push(addPipe());
 				pipeCount++;
 				if (levels.indexOf(pipeCount) > -1) {
-					levelUp(stage, flapper, pipes, pipeCount, speed, levels.indexOf(pipeCount) + 2);
+					speed = levelUp(stage, flapper, pipes, pipeCount, speed, levels.indexOf(pipeCount) + 2);
 				}
 				addPipes();
 			}, int);
@@ -189,6 +189,7 @@ function levelUp (stage, flapper, pipes, pipeCount, speed, level) {
 	setTimeout(function () {
 		alertModal(stage, flapper, pipes, pipeCount, speed, 'Level ' + level +'!', 'Continue', helpers.continue);
 	}, speed);
+	return speed - 2;
 }
 
 var helpers = {
