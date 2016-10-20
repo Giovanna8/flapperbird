@@ -9,8 +9,9 @@ function init (skipStart) {
 	ground.graphics.beginFill('#60c92b').drawRect(0,0,750, 50);
 	ground.y = 450;
 
-	var flapper = new createjs.Shape();
-	flapper.graphics.beginFill('#89667c').drawCircle(0,0,20);
+	var flapper = new createjs.Bitmap("img/flapper_bird.svg");
+	flapper.scaleX = .1;
+	flapper.scaleY = .1;
 	flapper.x = 40;
 	flapper.y = 240;
 
