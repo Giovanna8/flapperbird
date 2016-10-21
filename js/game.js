@@ -59,13 +59,7 @@ function startGame (stage, flapper, pipes, pipeCount, speed) {
 
 	checkForCollision(stage, pipes, flapper, speed);
 
-	window.onkeyup = function (e) {
-		if (e.keyCode === 38) {
-			moveFlapper(stage, flapper, -1, speed);
-		} else if (e.keyCode === 40) {
-			moveFlapper(stage, flapper, 1, speed);
-		}
-	}
+	// Add code to make Flapperbird flap!
 }
 
 function updateStage(stage, speed) {
